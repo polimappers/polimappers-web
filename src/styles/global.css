@@ -1,3 +1,13 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
 @plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+
+  --depth: 0;
+  --noise: 0;
+}

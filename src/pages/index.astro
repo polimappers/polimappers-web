@@ -1,24 +1,86 @@
 ---
 import Layout from "../layout/Layout.astro";
+import { sampleGrid, simplexNoiseGrid } from "../util/sample-grid";
+import IsolinesSvg from "../components/IsolinesSvg.astro";
+
+import alea from "alea";
+import { createNoise2D } from "simplex-noise";
+
+const options = {
+  width: 700,
+  height: 400,
+  cellSize: 5,
+};
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
+
+const map = (
+  value: number,
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number,
+) => ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+
+const seed = 1;
+const scale = 0.01;
+
+const prng = alea(seed);
+const noise = createNoise2D(prng);
+const grid = sampleGrid((x, y) => {
+  const [cx, cy] = [50, 50];
+
+  const d = clamp(
+    Math.hypot(x - cx, y - cy) /
+      (0.75 * Math.hypot(options.width, options.height)),
+    0,
+    1,
+  );
+
+  const n = map(noise(x * scale, y * scale), -1, 1, 0, 1);
+
+  return d + n * 0.5; // add noise to the distance, with a weight of 0.5
+}, options);
 ---
 
 <Layout>
   <main class="my-8 space-y-8">
     <div
-      class="w-4/6 box-content mx-auto bg-primary text-primary-content p-8 rounded-lg text-lg shadow-md"
+      class="w-4/6 mx-auto box-content p-8 rounded-lg text-lg shadow-md relative"
     >
-      <h1 class="text-4xl font-black mb-4">Polimappers</h1>
+      <!-- FIXME: low contrast -->
+      <IsolinesSvg
+        class="absolute top-0 left-0 w-full h-full -z-1 stroke-accent/50 rounded-lg bg-primary"
+        grid={grid}
+        lines={[
+          { level: 0.1, dashed: true },
+          { level: 0.2, dashed: false },
+          { level: 0.3, dashed: true },
+          { level: 0.4, dashed: false },
+          { level: 0.5, dashed: true },
+          { level: 0.6, dashed: false },
+          { level: 0.7, dashed: true },
+          { level: 0.8, dashed: false },
+          { level: 0.9, dashed: true },
+          { level: 1, dashed: false },
+        ]}
+      />
 
-      <p>
-        PoliMappers is a volunteer students' group, based at <a
-          href="http://www.polimi.it/"
-          target="_blank"
-          rel="noopener noreferrer">Politecnico di Milano</a
-        >, created in December 2016. The mission of the group is to train and
-        motivate the next generation of volunteer mappers and to do mapping
-        using free and open source software within the university as well as
-        primary and secondary schools.
-      </p>
+      <div class="text-primary-content">
+        <h1 class="text-4xl font-black mb-4">Polimappers</h1>
+
+        <p>
+          PoliMappers is a volunteer students' group, based at <a
+            href="http://www.polimi.it/"
+            target="_blank"
+            rel="noopener noreferrer">Politecnico di Milano</a
+          >, created in December 2016. The mission of the group is to train and
+          motivate the next generation of volunteer mappers and to do mapping
+          using free and open source software within the university as well as
+          primary and secondary schools.
+        </p>
+      </div>
     </div>
 
     <div class="w-4/6 mx-auto">

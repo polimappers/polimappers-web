@@ -1,7 +1,7 @@
 ---
 import type { MultiLineString, Position } from "geojson";
 import * as turf from "@turf/turf";
-import type { SampleGrid } from "../util/noise";
+import type { SampleGrid } from "../util/sample-grid";
 
 function isolines(grid: SampleGrid, levels: number[]) {
   const pointsArr = [];
@@ -57,11 +57,12 @@ const levels = lines.map((l) => l.level);
 const iso = isolines(grid, levels);
 ---
 
+<!-- `preserveAspectRatio` crops the svg to the top-left corner, so that it doesn't stretch when resized -->
 <svg
   width={width}
   height={height}
   viewBox={`0 0 ${width} ${height}`}
-  preserveAspectRatio="xMidYMid meet"
+  preserveAspectRatio="xMinYMin slice"
   class={className}
 >
   {

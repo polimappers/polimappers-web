@@ -1,0 +1,83 @@
+---
+import type { MultiLineString, Position } from "geojson";
+import * as turf from "@turf/turf";
+import type { SampleGrid } from "../util/noise";
+
+function isolines(grid: SampleGrid, levels: number[]) {
+  const pointsArr = [];
+  for (let u = 0; u < grid.grid.length; u++) {
+    for (let v = 0; v < grid.grid[u].length; v++) {
+      const x = v * grid.cellSize;
+      const y = u * grid.cellSize;
+      pointsArr.push(turf.point([x, y], { value: grid.grid[u][v] }));
+    }
+  }
+
+  const points = turf.featureCollection(pointsArr);
+  const isolines = turf.isolines(points, levels, {
+    zProperty: "value",
+  });
+
+  return isolines;
+}
+
+function coordinatesToPathData(coords: Position[]) {
+  return coords
+    .map((c, i) => {
+      const [x, y] = c;
+      const command = i === 0 ? "M" : "L";
+      return `${command} ${x} ${y}`;
+    })
+    .join(" ");
+}
+
+function MultilinestringToPathData(mls: MultiLineString) {
+  return mls.coordinates
+    .map((lineCoords) => coordinatesToPathData(lineCoords))
+    .join(" ");
+}
+
+interface LineStyle {
+  level: number;
+  dashed: boolean;
+}
+
+interface Props {
+  class: string | null | undefined;
+  grid: SampleGrid;
+  lines: LineStyle[];
+}
+
+const { class: className, grid, lines } = Astro.props;
+
+const width = grid.grid[0].length * grid.cellSize;
+const height = grid.grid.length * grid.cellSize;
+
+const levels = lines.map((l) => l.level);
+const iso = isolines(grid, levels);
+---
+
+<svg
+  width={width}
+  height={height}
+  viewBox={`0 0 ${width} ${height}`}
+  preserveAspectRatio="xMidYMid meet"
+  class={className}
+>
+  {
+    iso.features.map((feature, i) => {
+      const d = MultilinestringToPathData(feature.geometry);
+      const isDashed = lines[i].dashed;
+      return (
+        <path
+          d={d}
+          fill="none"
+          stroke-dasharray={isDashed ? "4 4" : "none"}
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      );
+    })
+  }
+</svg>

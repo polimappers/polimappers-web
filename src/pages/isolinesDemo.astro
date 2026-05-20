@@ -1,0 +1,38 @@
+---
+import Layout from "../layout/Layout.astro";
+import IsolinesSvg from "../components/IsolinesSvg.astro";
+import { simplexNoiseGrid } from "../util/noise";
+
+const grid = simplexNoiseGrid(
+  {
+    seed: 1,
+    scale: 0.003,
+  },
+  {
+    width: 700,
+    height: 400,
+    cellSize: 5,
+  },
+);
+---
+
+<Layout>
+  <div class="mx-auto w-fit m-8 border">
+    <IsolinesSvg
+      class="stroke-accent"
+      grid={grid}
+      lines={[
+        { level: 0.1, dashed: true },
+        { level: 0.2, dashed: false },
+        { level: 0.3, dashed: true },
+        { level: 0.4, dashed: false },
+        { level: 0.5, dashed: true },
+        { level: 0.6, dashed: false },
+        { level: 0.7, dashed: true },
+        { level: 0.8, dashed: false },
+        { level: 0.9, dashed: true },
+        { level: 1, dashed: false },
+      ]}
+    />
+  </div>
+</Layout>

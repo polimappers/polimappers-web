@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layout/Layout.astro";
+
+const events = await getCollection("events");
+---
+
+<Layout>
+  <main class="prose mx-auto my-8">
+    <h1 class="text-2xl mb-4">Events</h1>
+    <p>Welcome to the Events page!</p>
+
+    <ul>
+      {
+        events.map((event) => (
+          <li>
+            <a href={`/events/${event.id}`}>{event.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>

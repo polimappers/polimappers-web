@@ -1,0 +1,41 @@
+---
+import { Image } from "astro:assets";
+import logoImg from "../assets/logo.png";
+
+// TODO: icons for links
+const links = [
+  {
+    name: "Github",
+    href: "https://github.com/polimappers",
+  },
+  {
+    name: "Telegram",
+    href: "https://t.me/polimappers",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/polimappers",
+  },
+];
+---
+
+<footer
+  class="footer footer-horizontal bg-neutral text-neutral-content py-8 px-12"
+>
+  <aside>
+    <Image src={logoImg} width={192} alt="Polimappers Logo" />
+  </aside>
+
+  <nav>
+    <h6 class="footer-title">Links</h6>
+    <div class="grid grid-flow-col gap-4">
+      {
+        links.map((link) => (
+          <a href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.name}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</footer>

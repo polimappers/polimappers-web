@@ -11,10 +11,10 @@ const events = await getCollection("events");
   <main class="w-4/6 mx-auto my-8">
     <h1 class="text-2xl mb-4">Events</h1>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {
         events.map((event) => (
-          <a href={`/events/${event.id}`} class="card bg-base-100 shadow-xl">
+          <a href={`/events/${event.id}`} class="card bg-base-200 shadow-xl">
             <figure>
               {event.data.heroImage && (
                 <Image
@@ -37,3 +37,4 @@ const events = await getCollection("events");
     </div>
   </main>
 </Layout>
+

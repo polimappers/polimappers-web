@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import logoImg from "../assets/logo.png";
+
 import Layout from "../layout/Layout.astro";
 import { sampleGrid, simplexNoiseGrid } from "../util/sample-grid";
 import IsolinesSvg from "../components/IsolinesSvg.astro";
@@ -29,14 +32,7 @@ const scale = 0.01;
 const prng = alea(seed);
 const noise = createNoise2D(prng);
 const grid = sampleGrid((x, y) => {
-  const [cx, cy] = [50, 50];
-
-  const d = clamp(
-    Math.hypot(x - cx, y - cy) /
-      (0.75 * Math.hypot(options.width, options.height)),
-    0,
-    1,
-  );
+  const d = y / options.height + 0.15; // simple gradient from top to bottom
 
   const n1 = map(noise(x * scale, y * scale), -1, 1, 0, 1);
   const n2 = map(noise(x * scale * 2, y * scale * 2), -1, 1, 0, 1);
@@ -46,26 +42,26 @@ const grid = sampleGrid((x, y) => {
 ---
 
 <Layout>
-  <main class="my-8 space-y-8">
-    <div
-      class="w-4/6 mx-auto box-content p-8 rounded-lg text-lg shadow-lg relative"
-    >
-      <IsolinesSvg
-        class="absolute top-0 left-0 w-full h-full -z-1 rounded-xl stroke-base-100 bg-base-300"
-        grid={grid}
-        lines={[
-          { level: 0.2, dashed: false },
-          { level: 0.4, dashed: true },
-          { level: 0.6, dashed: false },
-          { level: 0.8, dashed: true },
-          { level: 1, dashed: false },
-        ]}
-      />
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-1">
+    <IsolinesSvg
+      class="min-w-full h-auto stroke-base-200"
+      grid={grid}
+      lines={[
+        { level: 0.2, dashed: false },
+        { level: 0.4, dashed: true },
+        { level: 0.6, dashed: false },
+        { level: 0.8, dashed: true },
+        { level: 1, dashed: false },
+      ]}
+    />
+  </div>
 
-      <div class="text-base-content">
-        <h1 class="text-4xl font-black mb-4">Polimappers</h1>
-
-        <p>
+  <div class="hero my-8">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+      <Image src={logoImg} class="max-w-sm rounded-lg" alt="Polimappers Logo" />
+      <div>
+        <h1 class="text-5xl font-bold">Polimappers</h1>
+        <p class="my-6">
           PoliMappers is a volunteer students' group, based at <a
             href="http://www.polimi.it/"
             target="_blank"
@@ -75,29 +71,31 @@ const grid = sampleGrid((x, y) => {
           using free and open source software within the university as well as
           primary and secondary schools.
         </p>
+
+        <p class="my-6">
+          PoliMappers is the first European chapter of the international
+          association <a
+            href="http://www.youthmappers.org/"
+            target="_blank"
+            rel="noopener noreferrer">YouthMappers</a
+          >, founded in 2014 in the United States of America with the support of <a
+            href="https://www.usaid.gov/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >United States Agency for International Development</a
+          > (USAID). YouthMappers aims to cultivate a new generation of leaders in
+          the field of open geospatial data and technologies, with the purpose of
+          creating through them resilient communities of the future. It is a global
+          network that currently includes 446 chapters in 83 countries (updated 02/2026).
+          In accordance with the terms of participation of YouthMappers, the association's
+          activities include at least two mapping activities per year: mapping the
+          local area and participating in a YouthMappers network promoted campaign.
+        </p>
       </div>
     </div>
+  </div>
 
-    <div class="w-4/6 mx-auto">
-      <p>
-        PoliMappers is the first European chapter of the international
-        association <a
-          href="http://www.youthmappers.org/"
-          target="_blank"
-          rel="noopener noreferrer">YouthMappers</a
-        >, founded in 2014 in the United States of America with the support of <a
-          href="https://www.usaid.gov/"
-          target="_blank"
-          rel="noopener noreferrer"
-          >United States Agency for International Development</a
-        > (USAID). YouthMappers aims to cultivate a new generation of leaders in the
-        field of open geospatial data and technologies, with the purpose of creating
-        through them resilient communities of the future. It is a global network that
-        currently includes 446 chapters in 83 countries (updated 02/2026). In accordance
-        with the terms of participation of YouthMappers, the association's activities
-        include at least two mapping activities per year: mapping the local area and
-        participating in a YouthMappers network promoted campaign.
-      </p>
-    </div>
-  </main>
+  <div class="h-screen">
+    <!-- temporary space filler -->
+  </div>
 </Layout>

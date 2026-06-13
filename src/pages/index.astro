@@ -5,6 +5,7 @@ import logoImg from "../assets/logo.png";
 import Layout from "../layout/Layout.astro";
 import { sampleGrid, simplexNoiseGrid } from "../util/sample-grid";
 import IsolinesSvg from "../components/IsolinesSvg.astro";
+import EventsList from "../components/EventsList.astro";
 
 import alea from "alea";
 import { createNoise2D } from "simplex-noise";
@@ -99,10 +100,12 @@ const grid = sampleGrid((x, y) => {
     <h2 class="text-3xl font-bold mb-4">Latest Events</h2>
     <p class="mb-6">Check out our latest events and activities.</p>
 
-    <a href="/events" class="btn btn-primary">View All Events</a>
+    <EventsList limit={3} />
+
+    <a href="/events" class="btn btn-primary mt-4">View All Events</a>
   </div>
 
-  <div class="h-screen">
+  <div class="h-[50vh]">
     <!-- temporary space filler -->
   </div>
 </Layout>

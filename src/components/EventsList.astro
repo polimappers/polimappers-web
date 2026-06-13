@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+
+const allEvents = await getCollection("events");
+allEvents.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const events = limit ? allEvents.slice(0, limit) : allEvents;
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {
+    events.map((event) => (
+      <a href={`/events/${event.id}`} class="card bg-base-200 shadow-xl">
+        <figure>
+          {event.data.heroImage && (
+            <Image width={720} height={360} src={event.data.heroImage} alt="" />
+          )}
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">{event.data.title}</h2>
+          <p>{event.data.description}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>

@@ -3,6 +3,8 @@ title: "STEM in the city"
 description: "STEM in the city is a project that aims to bring together students, educators, and professionals in the fields of science, technology, engineering, and mathematics (STEM)."
 pubDate: "2024-06-01"
 heroImage: "../../assets/STEM-cover.png"
+attachments:
+  - "../../../downloads/STEM PoliMappers.pdf"
 ---
 
 # STEM!

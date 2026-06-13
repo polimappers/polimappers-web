@@ -21,5 +21,23 @@ const { Content } = await render(event);
     <article class="prose mx-auto my-8">
       <Content />
     </article>
+
+    {
+      event.data.attachments && (
+        <div class="mx-auto my-8 max-w-prose">
+          <h2 class="text-2xl font-bold mb-4">Attachments</h2>
+
+          {event.data.attachments.map((attachment) => (
+            <a
+              href={attachment}
+              class="btn btn-primary btn-outline w-full"
+              target="_blank"
+            >
+              Download {attachment.split("/").pop()}
+            </a>
+          ))}
+        </div>
+      )
+    }
   </main>
 </Layout>

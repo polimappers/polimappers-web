@@ -59,7 +59,12 @@ const grid = sampleGrid((x, y) => {
 
   <main class="hero my-8">
     <div class="hero-content flex-col lg:flex-row-reverse">
-      <Image src={logoImg} class="max-w-sm rounded-lg" alt="Polimappers Logo" />
+      <Image
+        src={logoImg}
+        loading="eager"
+        class="max-w-sm rounded-lg"
+        alt="Polimappers Logo"
+      />
       <div>
         <h1 class="text-5xl font-bold">Polimappers</h1>
         <p class="my-6">

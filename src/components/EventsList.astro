@@ -12,6 +12,40 @@ const allEvents = await getCollection("events");
 allEvents.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const events = limit ? allEvents.slice(0, limit) : allEvents;
+
+const imgSize = {
+  width: 720,
+  height: 360,
+};
+
+import IsolinesSvg from "./IsolinesSvg.astro";
+import Alea from "alea";
+import { createNoise2D } from "simplex-noise";
+import { map, sampleGrid } from "../util/sample-grid";
+
+const makeNoiseGridForPlaceholder = (seed: string) => {
+  const options = {
+    width: imgSize.width,
+    height: imgSize.height,
+    cellSize: 5,
+  };
+
+  const scale = 0.006;
+
+  const prng = Alea(seed);
+  const noise = createNoise2D(prng);
+
+  const [cx, cy] = [prng() * options.width, prng() * options.height];
+  const grid = sampleGrid((x, y) => {
+    const d =
+      Math.hypot(x - cx, y - cy) / Math.hypot(options.width, options.height);
+    const n1 = map(noise(x * scale, y * scale), -1, 1, 0, 1);
+    const n2 = map(noise(x * scale * 2, y * scale * 2), -1, 1, 0, 1);
+    return d + n1 * 0.5 + n2 * 0.25;
+  }, options);
+
+  return grid;
+};
 ---
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -19,8 +53,20 @@ const events = limit ? allEvents.slice(0, limit) : allEvents;
     events.map((event) => (
       <a href={`/events/${event.id}`} class="card bg-base-200 shadow-xl">
         <figure>
-          {event.data.heroImage && (
-            <Image width={720} height={360} src={event.data.heroImage} alt="" />
+          {event.data.heroImage ? (
+            <Image {...imgSize} src={event.data.heroImage} alt="" />
+          ) : (
+            <IsolinesSvg
+              class="min-w-full h-auto stroke-base-content"
+              grid={makeNoiseGridForPlaceholder(event.id)}
+              lines={[
+                { level: 0.2, dashed: false },
+                { level: 0.4, dashed: true },
+                { level: 0.6, dashed: false },
+                { level: 0.8, dashed: true },
+                { level: 1, dashed: false },
+              ]}
+            />
           )}
         </figure>
         <div class="card-body">

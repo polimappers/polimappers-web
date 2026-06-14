@@ -15,4 +15,13 @@ const events = defineCollection({
     }),
 });
 
-export const collections = { events };
+const projects = defineCollection({
+  loader: glob({ base: "./src/content/projects", pattern: "**/*.{md,mdx}" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+});
+
+export const collections = { events, projects };

@@ -18,13 +18,13 @@ const { Content } = await render(event);
 
 <Layout>
   <main>
-    <article class="prose mx-auto my-8">
+    <article class="prose lg:prose-lg mx-auto my-8 px-4">
       <Content />
     </article>
 
     {
       event.data.attachments && (
-        <div class="mx-auto my-8 max-w-prose">
+        <div class="mx-auto my-8 px-4 max-w-prose lg:prose-lg">
           <h2 class="text-2xl font-bold mb-4">Attachments</h2>
 
           {event.data.attachments.map((attachment) => (

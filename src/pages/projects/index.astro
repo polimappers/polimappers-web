@@ -1,11 +1,29 @@
 ---
+import { getCollection } from "astro:content";
+
 import Layout from "../../layout/Layout.astro";
+
+const projects = await getCollection("projects");
 ---
 
 <Layout>
   <main class="w-4/6 mx-auto my-8">
     <h1 class="text-2xl mb-4">Projects</h1>
 
-    <!-- TODO -->
+    <div class="grid grid-cols-1 gap-4">
+      {
+        projects.map((project) => (
+          <a
+            href={`/projects/${project.id}`}
+            class="card bg-base-200 shadow-xl"
+          >
+            <div class="card-body">
+              <h2 class="card-title">{project.data.title}</h2>
+              <p>{project.data.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
   </main>
 </Layout>

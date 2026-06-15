@@ -10,6 +10,7 @@ export async function getStaticPaths() {
 }
 
 import Layout from "../../layout/Layout.astro";
+import { Image } from "astro:assets";
 
 type Props = CollectionEntry<"events">;
 const event = Astro.props;
@@ -31,16 +32,34 @@ const dateString = event.data.updatedDate
 <Layout>
   <main>
     <article class="my-8 px-4">
-      <div class="prose lg:prose-lg mx-auto my-8 px-4">
-        <h1 class="text-4xl font-bold mb-2">{event.data.title}</h1>
-        <p class="text-sm text-gray-500 mt-2">{dateString}</p>
+      <div class="mx-auto my-8 px-4 max-w-[75ch]">
+        <h1 class="text-6xl font-bold mb-2">
+          {event.data.title}
+        </h1>
+        <p class="text-sm mt-2">{dateString}</p>
+      </div>
 
-        <Content />
+      <!-- TODO: better alt text -->
+      {
+        event.data.heroImage && (
+          <Image
+            src={event.data.heroImage}
+            alt={"Cover image for the event: " + event.data.title}
+            loading="eager"
+            class="max-w-full lg:max-w-5/6 xl:max-w-6xl mx-auto my-4 rounded-lg"
+          />
+        )
+      }
+
+      <div class="mx-auto my-8 px-4 max-w-[75ch]">
+        <div class="prose lg:prose-lg max-w-none">
+          <Content />
+        </div>
       </div>
 
       {
         event.data.attachments && (
-          <div class="mx-auto my-8 px-4 max-w-prose lg:prose-lg">
+          <div class="mx-auto my-8 px-4 max-w-[75ch]">
             <h2 class="text-2xl font-bold mb-4">Attachments</h2>
 
             {event.data.attachments.map((attachment) => (

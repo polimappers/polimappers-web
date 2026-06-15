@@ -14,30 +14,47 @@ import Layout from "../../layout/Layout.astro";
 type Props = CollectionEntry<"events">;
 const event = Astro.props;
 const { Content } = await render(event);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+const dateString = event.data.updatedDate
+  ? `Published on ${formatDate(event.data.pubDate)} | Updated on ${formatDate(event.data.updatedDate)}`
+  : `Published on ${formatDate(event.data.pubDate)}`;
 ---
 
 <Layout>
   <main>
-    <article class="prose lg:prose-lg mx-auto my-8 px-4">
-      <Content />
+    <article class="my-8 px-4">
+      <div class="prose lg:prose-lg mx-auto my-8 px-4">
+        <h1 class="text-4xl font-bold mb-2">{event.data.title}</h1>
+        <p class="text-sm text-gray-500 mt-2">{dateString}</p>
+
+        <Content />
+      </div>
+
+      {
+        event.data.attachments && (
+          <div class="mx-auto my-8 px-4 max-w-prose lg:prose-lg">
+            <h2 class="text-2xl font-bold mb-4">Attachments</h2>
+
+            {event.data.attachments.map((attachment) => (
+              <a
+                href={attachment}
+                class="btn btn-primary btn-outline w-full"
+                target="_blank"
+              >
+                Download {attachment.split("/").pop()}
+              </a>
+            ))}
+          </div>
+        )
+      }
     </article>
-
-    {
-      event.data.attachments && (
-        <div class="mx-auto my-8 px-4 max-w-prose lg:prose-lg">
-          <h2 class="text-2xl font-bold mb-4">Attachments</h2>
-
-          {event.data.attachments.map((attachment) => (
-            <a
-              href={attachment}
-              class="btn btn-primary btn-outline w-full"
-              target="_blank"
-            >
-              Download {attachment.split("/").pop()}
-            </a>
-          ))}
-        </div>
-      )
-    }
   </main>
 </Layout>

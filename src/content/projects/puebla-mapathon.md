@@ -14,3 +14,5 @@ Course plan:
 3. **Objects to Map**, *June 19th*: OSM data model (node, line, closed line, relationship and tag), WikiOSM, practical examples for buildings and urban features.
 4. **Puebla 2026 Mapathon**, *June 26th*: access to Tasking Manager, how Tasking Manager work, how to contribute on your own and manage your edits.
 5. **Use of information**, *July 3th*: how validation work after mapathon, how to download such data, how to keep track and document the activity (WikiOSM), how to connect with the local community
+
+After the third session, the participants actively contributed to the mapping of Puebla City in Mexico by mapping on [Project #52971](https://tasks.hotosm.org/projects/52971) on HOT Tasking Manager.
